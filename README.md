@@ -1,6 +1,6 @@
 # Geography_490_Final_Project  🗺️
 
-### Kinematic Analysis of Landslide Movement
+### A Kinematic Analysis of Landslide Movement in Florence, Oregon
 
 ### Members
 Jett R and Jamel M
