@@ -1,6 +1,6 @@
-# Geograph490_Final_Project  🗺️
+# Geography_490_Final_Project  🗺️
 
-### Kinematic Analysis of Landslide Movement 🪨
+### Kinematic Analysis of Landslide Movement
 
 ### Members
 Jett R and Jamel M
