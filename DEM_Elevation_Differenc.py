@@ -14,9 +14,9 @@ from rasterio.warp import calculate_default_transform, reproject, Resampling
 from rasterio.enums import Resampling
 from rasterio.transform import Affine , AffineTransformer 
 from rasterio.mask import mask
+from shapely.geometry import box
 
-
-#from osgeo import gdal
+from osgeo import gdal
 
 import os
 
@@ -256,15 +256,29 @@ else:
 # Take a Look at the reprojected data
 
 # File path of the reprojected image
-reprojected_image_path = 'w001001_reproj.tif'
+#reprojected_image_path = 'w001001_reproj.tif'
 
 # Open the reprojected image file
-with rio.open(reprojected_image_path) as reprojected_image:
-    # Display the reprojected image
-    show(reprojected_image, title='Reprojected Image')
-    reprojected_image.close()
+#with rio.open(reprojected_image_path) as reprojected_image:
+#    # Display the reprojected image
+#    show(reprojected_image, title='Reprojected Image')
+#    reprojected_image.close()
 
 
+
+reprojected_image_path = rio.open('w001001_reproj.tif')
+
+nodata_value_2009 = -3.4028234663852886e+38
+
+DEM_2009_Repoj_data = reprojected_image_path.read()
+
+# Replace nodata values with NaN
+DEM_2009_Repoj_data_fixed = np.where(DEM_2009_Repoj_data == nodata_value_2009, np.nan, DEM_2009_Repoj_data)
+
+plt.imshow(DEM_2009_Repoj_data_fixed.squeeze())
+plt.title('2009 Reprojected in Feet')
+plt.colorbar()
+plt.show()
 
 
 
@@ -321,6 +335,7 @@ DEM_2009_Repoj_metes_data = DEM_2009_Reproj_meters.read()
 Reproject_Array_2009_fixed = np.where(DEM_2009_Repoj_metes_data == nodata_value_2009, np.nan, DEM_2009_Repoj_metes_data)
 
 plt.imshow(Reproject_Array_2009_fixed.squeeze())
+plt.title('reprojected and converted to meters')
 plt.colorbar()
 plt.show()
 
@@ -401,62 +416,78 @@ with rio.open(path2009) as src:
 
 #%%
 
+# Cropping the 2017 DEM using info from the 2009 DEM
 
 
-# Masking the 2009 DEM to fit the extents of the 2017 DEM
-
-# We want to put on a mask over the 2009 DEM. 
-# Here we are checking to first make sure the Files have not been created already
-# Then we open the 2017 file, get the bounds and make it a Polygon. then open the 2009 file, and apply a mask that is the shape
-# of the polygon, cropping out everythin outside the polygon. Then we update the metadata to this new cropped image/array, and write
-# out the file to our output path. 
-
-
-
-
-from shapely.geometry import box
-
-# Paths to your DEMs
+# Check if the output file directory exists
+output_path = 'DEM2009_cropped.tif'
 path2017 = 'output_be.tif'
 path2009 = 'reprojected_dem_meters.tif'
 
-output_path = 'DEM2009_cropped.tif'
 
-# Check if the output file directory exists
+
 if not os.path.exists(output_path):
-    # Open the 2017 DEM to get its extent
+    # Open the 2017 DEM to get its extent and resolution
     with rio.open(path2017) as src2017:
-        # Read the extent of the 2017 DEM
         extent_2017 = src2017.bounds
         nodata_value_2017 = src2017.nodata
-
+        res_2017 = src2017.res  # Get the resolution of the 2017 DEM
+        crs_2017 = src2017.crs
+        
         # Convert the extent to a polygon geometry
         extent_polygon = box(*extent_2017)
 
-        # Open the 2009 DEM and crop it to match the extent of the 2017 DEM
+        # Open the 2009 DEM and resample it to match the 2017 DEM resolution
         with rio.open(path2009) as src2009:
-            # Crop the 2009 DEM based on the extent of the 2017 DEM
-            cropped_data, cropped_transform = mask(src2009, [extent_polygon], crop=True)
-
-            # Update metadata
-            cropped_meta = src2009.meta.copy()
-            cropped_meta.update({
-                'driver': 'GTiff',
-                'height': cropped_data.shape[1],
-                'width': cropped_data.shape[2],
-                'transform': cropped_transform,
+            # Calculate the transform and dimensions for the resampled data
+            transform, width, height = calculate_default_transform(
+                src2009.crs, crs_2017, src2009.width, src2009.height, *extent_2017, resolution=res_2017
+            )
+            
+            # Define metadata for the resampled dataset
+            resampled_meta = src2009.meta.copy()
+            resampled_meta.update({
+                'crs': crs_2017,
+                'transform': transform,
+                'width': width,
+                'height': height,
                 'nodata': nodata_value_2017
             })
 
-            # Write the cropped DEM to a new raster file
-            with rio.open(output_path, 'w', **cropped_meta) as dst:
-                dst.write(cropped_data)
+            # Create a new dataset for the resampled DEM
+            resampled_dem_path = 'resampled_2009_dem.tif'
+            with rio.open(resampled_dem_path, 'w', **resampled_meta) as resampled_dst:
+                for i in range(1, src2009.count + 1):
+                    reproject(
+                        source=rio.band(src2009, i),
+                        destination=rio.band(resampled_dst, i),
+                        src_transform=src2009.transform,
+                        src_crs=src2009.crs,
+                        dst_transform=transform,
+                        dst_crs=crs_2017,
+                        resampling=Resampling.bilinear
+                    )
+
+            # Now read the resampled DEM and crop it to the extent of the 2017 DEM
+            with rio.open(resampled_dem_path) as resampled_src:
+                # Crop the resampled 2009 DEM based on the extent of the 2017 DEM
+                cropped_data, cropped_transform = mask(resampled_src, [extent_polygon], crop=True)
+
+                # Update metadata for the cropped dataset
+                cropped_meta = resampled_src.meta.copy()
+                cropped_meta.update({
+                    'driver': 'GTiff',
+                    'height': cropped_data.shape[1],
+                    'width': cropped_data.shape[2],
+                    'transform': cropped_transform,
+                    'nodata': nodata_value_2017
+                })
+
+                # Write the cropped DEM to a new raster file
+                with rio.open(output_path, 'w', **cropped_meta) as dst:
+                    dst.write(cropped_data)
 else:
     print("File already exists. Skipping cropping.")
-
-
-
-
 
 
 
@@ -464,30 +495,27 @@ else:
 
 
 
-# Taking a look at the new Cropped 2009 DEM and the 2017 DEM 
+# Visualizing the DEMs now in the same projection, units and area
+
 
 DEM_2009_cropped = rio.open(output_path)
-
-nodata_value_2009 = -3.4028234663852886e+38
-
-
 Array_cropped = DEM_2009_cropped.read()
-Array_cropped_nodata_fix = np.where(Array_cropped == nodata_value_2009 , np.nan , Array_cropped)
+Array_cropped_nodata_fix = np.where(Array_cropped == nodata_value_2017, np.nan, Array_cropped)
+Array_2017 = DEM_2017.read()
 
 
+# Visualize both DEMs side by side
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5), sharey=True, sharex=True)
-
-# Plot the cropped images on the subplots
-im1 = ax1.imshow(Array_cropped_nodata_fix.squeeze(), cmap='viridis')  # Squeeze removes the unnecessary band axis (band , x ,y). Now the array is 2d
+im1 = ax1.imshow(Array_cropped_nodata_fix.squeeze(), cmap='viridis')
 im2 = ax2.imshow(Array_2017_fixed.squeeze(), cmap='viridis')
 
-cbar = fig.colorbar(im2, ax=[ax1, ax2], orientation='vertical', shrink=0.6)
-
-
-ax1.set_title('2009 DEM ')
-ax2.set_title('2017 DEM ')
+fig.colorbar(im2, ax=[ax1, ax2], orientation='vertical', shrink=0.6)
+ax1.set_title('2009 DEM Cropped')
+ax2.set_title('2017 DEM')
 
 plt.show()
+
+
 
 
 
@@ -517,5 +545,73 @@ with rio.open(path2009) as src:
     print(src.xy(0,0)) # Find (Row,Col) and returns (x,y)
     src.close()
 
+
+# Now their Meta Data is Exactly the Same
+
+
 #%%
 
+
+Array2009_cropped = Array_cropped_nodata_fix.squeeze()
+Array2017 = Array_2017_fixed.squeeze()
+
+Difference_Array = Array2017-Array2009_cropped
+
+
+# Path to the output raster file
+output_path = 'Difference_DEM.tif'
+
+# Check if the output file already exists
+if not os.path.exists(output_path):
+    # Read the metadata from one of the original DEMs (e.g., DEM 2009 cropped)
+    with rio.open('DEM2009_cropped.tif') as src:
+        meta = src.meta.copy()
+
+    # Update the metadata to reflect the new data type and no-data value if necessary
+    meta.update({
+        'dtype': 'float32',  # Update the data type if needed
+        'nodata': np.nan     # Set the no-data value if needed
+    })
+
+    # Write the Difference_Array to a new raster file
+    with rio.open(output_path, 'w', **meta) as dst:
+        dst.write(Difference_Array.astype('float32'), 1)  # Write the data to the first band
+
+    print(f"Difference DEM written to {output_path}")
+else:
+    print(f"File {output_path} already exists. Skipping writing.")
+    
+    
+#%%
+
+# Quick Plot
+
+diffmap = rio.open('Difference_DEM.tif')
+diffarray = diffmap.read().squeeze()
+
+plt.figure()
+plt.title('Difference DEM')
+plt.imshow(diffarray, cmap='viridis')
+plt.colorbar()
+
+
+
+#%%
+
+# Zooming in on the Slide
+
+
+xmin = 1000  
+xmax = 2000  
+ymin = 900  
+ymax = 1500 
+
+
+plt.figure()
+plt.title('Difference DEM')
+plt.imshow(diffarray, cmap='viridis')  
+plt.colorbar()
+plt.xlim(xmin - 0.5, xmax + 0.5) 
+plt.ylim(ymin - 0.5, ymax + 0.5)
+plt.gca().invert_yaxis()  # To ensure the origin (0,0) is at the top-left
+plt.show()
