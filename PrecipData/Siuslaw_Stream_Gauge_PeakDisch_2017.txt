@@ -1,0 +1,127 @@
+#
+# U.S. Geological Survey
+# National Water Information System
+# Retrieved: 2024-05-15 15:11:38 EDT
+#
+# ---------------------------------- WARNING ----------------------------------------
+# Some of the data that you have obtained from this U.S. Geological Survey database
+# may not have received Director's approval. Any such data values are qualified
+# as provisional and are subject to revision. Provisional data are released on the
+# condition that neither the USGS nor the United States Government may be held liable
+# for any damages resulting from its use.
+#
+# More data may be available offline.
+# For more information on these data,  contact  USGS Water Data Inquiries.
+# This file contains the annual peak streamflow data.
+#
+# This information includes the following fields:
+#
+#  agency_cd     Agency Code
+#  site_no       USGS station number
+#  peak_dt       Date of peak streamflow (format YYYY-MM-DD)
+#  peak_tm       Time of peak streamflow (24 hour format, 00:00 - 23:59)
+#  peak_va       Annual peak streamflow value in cfs
+#  peak_cd       Peak Discharge-Qualification codes (see explanation below)
+#  gage_ht       Gage height for the associated peak streamflow in feet
+#  gage_ht_cd    Gage height qualification codes
+#  year_last_pk  Peak streamflow reported is the highest since this year
+#  ag_dt         Date of maximum gage-height for water year (if not concurrent with peak)
+#  ag_tm         Time of maximum gage-height for water year (if not concurrent with peak
+#  ag_gage_ht    maximum Gage height for water year in feet (if not concurrent with peak
+#  ag_gage_ht_cd maximum Gage height code
+#
+# Sites in this file include:
+#  USGS 14307620 SIUSLAW RIVER NEAR MAPLETON, OR
+#
+# Peak Streamflow-Qualification Codes(peak_cd):
+#   1 ... Discharge is a Maximum Daily Average
+#   2 ... Discharge is an Estimate
+#   3 ... Discharge affected by Dam Failure
+#   4 ... Discharge less than indicated value,
+#           which is Minimum Recordable Discharge at this site
+#   5 ... Discharge affected to unknown degree by
+#           Regulation or Diversion
+#   6 ... Discharge affected by Regulation or Diversion
+#   7 ... Discharge is an Historic Peak
+#   8 ... Discharge actually greater than indicated value
+#   9 ... Discharge due to Snowmelt, Hurricane,
+#           Ice-Jam or Debris Dam breakup
+#   A ... Year of occurrence is unknown or not exact
+#   Bd ... Day of occurrence is unknown or not exact
+#   Bm ... Month of occurrence is unknown or not exact
+#   C ... All or part of the record affected by Urbanization,
+#            Mining, Agricultural changes, Channelization, or other
+#   F ... Peak supplied by another agency
+#   O ... Opportunistic value not from systematic data collection
+#   R ... Revised
+#
+# Gage height qualification codes(gage_ht_cd,ag_gage_ht_cd):
+#   1 ... Gage height affected by backwater
+#   2 ... Gage height not the maximum for the year
+#   3 ... Gage height at different site and(or) datum
+#   4 ... Gage height below minimum recordable elevation
+#   5 ... Gage height is an estimate
+#   6 ... Gage datum changed during this year
+#   7 ... Debris, mud, or hyper-concentrated flow
+#   8 ... Gage height tidally affected
+#   Bd ... Day of occurrence is unknown or not exact
+#   Bm ... Month of occurrence is unknown or not exact
+#   F ... Peak supplied by another agency
+#   R ... Revised
+#
+#
+agency_cd	site_no	peak_dt	peak_tm	peak_va	peak_cd	gage_ht	gage_ht_cd	year_last_pk	ag_dt	ag_tm	ag_gage_ht	ag_gage_ht_cd
+5s	15s	10d	6s	8s	33s	8s	27s	4s	10d	6s	8s	27s
+USGS	14307620	1968-02-23		16800		15.85						
+USGS	14307620	1968-12-04		31600		22.63						
+USGS	14307620	1970-01-27		32300		22.93						
+USGS	14307620	1971-01-17		31600		22.63						
+USGS	14307620	1972-01-21		49400		28.45						
+USGS	14307620	1972-12-22		17000		15.63						
+USGS	14307620	1974-01-16		48900		28.28						
+USGS	14307620	1975-01-05		21100		17.65						
+USGS	14307620	1976-01-08		35300		23.58						
+USGS	14307620	1977-03-08		11400		12.64						
+USGS	14307620	1977-12-13		36400		23.99						
+USGS	14307620	1979-02-07		16600		15.46						
+USGS	14307620	1980-01-13		16900		15.65						
+USGS	14307620	1980-12-25		41400		25.73						
+USGS	14307620	1981-12-06		35800		23.67						
+USGS	14307620	1982-12-16		33300		22.75						
+USGS	14307620	1984-02-13		32200		22.35						
+USGS	14307620	1984-11-10		17500		15.82						
+USGS	14307620	1986-02-23		34000		23.01						
+USGS	14307620	1987-02-01		19500		16.86						
+USGS	14307620	1987-12-10		26900		20.19						
+USGS	14307620	1989-01-10		22100		18.03						
+USGS	14307620	1990-01-07		23100		18.49						
+USGS	14307620	1991-01-12		16400		15.32						
+USGS	14307620	1992-02-20		16500		15.40						
+USGS	14307620	1993-01-20		14400		14.31						
+USGS	14307620	1994-02-24		11900		12.94						
+USGS	14307620	1996-02-07		54800	7	30.21						
+USGS	14307620	1998-12-28	13:00						1998-12-28	1300	25.79	
+USGS	14307620	1999-11-26	06:00						1999-11-26	0600	21.87	
+USGS	14307620	2000-12-22	17:30						2000-12-22	1730	11.24	
+USGS	14307620	2001-12-14	02:30	20300		17.20						
+USGS	14307620	2002-12-31		26900		20.12						
+USGS	14307620	2003-12-13		22800		18.35						
+USGS	14307620	2004-12-10	02:00	9960		11.70						
+USGS	14307620	2005-12-30	18:30	36700		23.98						
+USGS	14307620	2006-11-07	13:00	23800		18.75						
+USGS	14307620	2007-12-03	21:30	30300		21.48						
+USGS	14307620	2008-12-28	11:30	23100		18.42						
+USGS	14307620	2010-03-31	02:30	14800		14.21						
+USGS	14307620	2010-12-29	01:45	22100		17.96						
+USGS	14307620	2012-01-19	15:30	48300		28.07						
+USGS	14307620	2012-11-19	23:30	22800		18.27						
+USGS	14307620	2014-02-12	17:00	22200		18.02						
+USGS	14307620	2014-12-21	03:30	33600		22.80						
+USGS	14307620	2015-12-18	04:00	32500		22.36						
+USGS	14307620	2017-02-05	16:45	22900		18.34						
+USGS	14307620	2017-10-22	11:30	12700		13.08						
+USGS	14307620	2019-04-08	09:45	26100		19.74						
+USGS	14307620	2020-01-28	21:45	13700		13.86						
+USGS	14307620	2021-01-13	07:00	29700		21.26						
+USGS	14307620	2021-12-20	05:15	21900		17.92						
+USGS	14307620	2022-12-27	21:30	19600		16.83						
