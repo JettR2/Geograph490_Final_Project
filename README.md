@@ -21,7 +21,7 @@ DOGAMI Survey 2007-2010
 https://portal.opentopography.org/datasetMetadata?otCollectionID=OT.022011.2994.1
 
 ### Python packages that team members require
-Rasterio , Pandas , Geopandas
+Rasterio , Shapely, GDal, Numpy, Matplotlib
 
 ### Planned methods/approach
 We want to use raster tools to calculate the changes in topography due to the landslide, hillslope hydrology and profile tools to characterize movement and lasting affects. Cross referencing papers on deep-seated landslides, rotational landslides etc. will allow us to make accrurate theses on the mechanisms of failure and movement.
