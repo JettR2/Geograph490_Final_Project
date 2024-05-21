@@ -275,6 +275,7 @@ DEM_2009_Repoj_data = reprojected_image_path.read()
 # Replace nodata values with NaN
 DEM_2009_Repoj_data_fixed = np.where(DEM_2009_Repoj_data == nodata_value_2009, np.nan, DEM_2009_Repoj_data)
 
+plt.figure()
 plt.imshow(DEM_2009_Repoj_data_fixed.squeeze())
 plt.title('2009 Reprojected in Feet')
 plt.colorbar()
@@ -334,6 +335,7 @@ DEM_2009_Repoj_metes_data = DEM_2009_Reproj_meters.read()
 # Replace nodata values with NaN
 Reproject_Array_2009_fixed = np.where(DEM_2009_Repoj_metes_data == nodata_value_2009, np.nan, DEM_2009_Repoj_metes_data)
 
+plt.figure()
 plt.imshow(Reproject_Array_2009_fixed.squeeze())
 plt.title('reprojected and converted to meters')
 plt.colorbar()
