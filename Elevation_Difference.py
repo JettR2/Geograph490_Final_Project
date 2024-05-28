@@ -603,17 +603,17 @@ plt.colorbar()
 # Zooming in on the Slide
 
 
-xmin = 1000  
-xmax = 2000  
-ymin = 900  
-ymax = 1500 
+xmin = 1050  
+xmax = 1800  
+ymin = 950  
+ymax = 1400 
 
 
 plt.figure()
-plt.title('Difference DEM')
-plt.imshow(diffarray, cmap='viridis')  
+plt.title('Difference DEM (meters) ')
+plt.imshow(diffarray, cmap='bwr_r')  
 plt.colorbar()
-plt.xlim(xmin - 0.5, xmax + 0.5) 
-plt.ylim(ymin - 0.5, ymax + 0.5)
+plt.xlim(xmin, xmax) 
+plt.ylim(ymin, ymax)
 plt.gca().invert_yaxis()  # To ensure the origin (0,0) is at the top-left
 plt.show()

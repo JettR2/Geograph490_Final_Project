@@ -7,7 +7,6 @@ Created on Mon May 20 14:52:38 2024
 
 #%%
 
-
 import rasterio as rio
 import rioxarray as rxr
 
@@ -115,7 +114,7 @@ for i in range(len(counts_large)):
     else:
         axs[0].fill_betweenx([0, counts_large[i]], bins_large[i], bins_large[i+1], color='blue', alpha=0.7)
 
-axs[0].set_title('Histogram of Large FoS Values')
+axs[0].set_title('2009 Histogram of Large FoS Values')
 axs[0].set_xlabel('FoS')
 axs[0].set_ylabel('Density')
 
@@ -146,7 +145,7 @@ for i in range(len(counts_small)):
     else:
         axs[1].fill_betweenx([0, counts_small[i]], bins_small[i], bins_small[i+1], color='blue', alpha=0.7)
 
-axs[1].set_title('Histogram of Small FoS Values')
+axs[1].set_title('2009 Histogram of Small FoS Values')
 axs[1].set_xlabel('FoS')
 axs[1].set_ylabel('Density')
 
@@ -167,25 +166,72 @@ plt.show()
 
 #%%
 
+# Plot the FOS on the DEM
+
+
+# Parameters for FoS calculation
+cohesion = 1000  # in Pascals
+soil_density = 2000  # kg/m^3
+gravity = 9.81  # m/s^2
+soil_depth = 10  # meters
+friction_angle = 30  # degrees
+# These ones will be the same for both 2009 and 2017
+
+
+# These ones will change for the 2009 and the 2017 data sets
+friction_angle_rad = np.deg2rad(friction_angle)
+slope_rad = np.deg2rad(slope_data)
+
+# Calculate numerator and denominator
+numerator = cohesion + (soil_density * gravity * soil_depth * np.cos(slope_rad)**2 * np.tan(friction_angle_rad))
+denominator = soil_density * gravity * soil_depth * np.sin(slope_rad) * np.cos(slope_rad)
+
+# Avoid division by zero by adding a small epsilon value to the denominator
+epsilon = 1e-10
+denominator = np.where(denominator == 0, epsilon, denominator)
+
+
+fos = numerator / denominator
+
+
+# Values Near slope instability
+fos = np.where((fos > 0) & (fos < 3), fos, np.nan) 
+
+
+
 
 # Load the DEM for extent and resolution
 dem_path = 'DEM2009_cropped.tif'
 dem = rxr.open_rasterio(dem_path, masked=True).squeeze()
 
 
-
-# Unpack the bounds
 left, bottom, right, top = dem.rio.bounds()
 
-# Plot the FoS raster
-plt.figure(figsize=(10, 8))
-plt.imshow(dem, cmap='viridis', extent=(left, right, bottom, top))
-plt.imshow(fos, cmap='RdYlGn', extent=(left, right, bottom, top) , alpha=0.75)
-plt.colorbar(label='Factor of Safety')
-plt.title('Factor of Safety (FoS)')
-plt.xlabel('Longitude')
-plt.ylabel('Latitude')
+# Create the figure and axis
+fig, ax = plt.subplots(figsize=(10, 8))
+
+# Plot the DEM data
+dem_plot = ax.imshow(dem, cmap='viridis', extent=(left, right, bottom, top))
+
+# Plot the FoS data
+fos_plot = ax.imshow(fos, cmap='RdYlGn', extent=(left, right, bottom, top), alpha=0.75)
+
+# Add colorbars
+cbar_dem = fig.colorbar(dem_plot, ax=ax, fraction=0.046, pad=0.12 , location='right')
+cbar_fos = fig.colorbar(fos_plot, ax=ax, fraction=0.046, pad=0.08)
+
+# Set colorbar labels
+cbar_dem.set_label('Elevation (m)')
+cbar_fos.set_label('Factor of Safety')
+
+# Set plot title and labels
+ax.set_title('2009 Factor of Safety (FoS) and DEM')
+ax.set_xlabel('Longitude')
+ax.set_ylabel('Latitude')
+
 plt.show()
+
+
 
 
 #%%
@@ -342,15 +388,30 @@ dem = rxr.open_rasterio(dem_path, masked=True).squeeze()
 
 left, bottom, right, top = dem.rio.bounds()
 
-# Plot the FoS raster
-plt.figure(figsize=(10, 8))
-plt.imshow(dem, cmap='viridis', extent=(left, right, bottom, top))
-plt.imshow(fos, cmap='RdYlGn', extent=(left, right, bottom, top) , alpha=0.75)
-plt.colorbar(label='Factor of Safety')
-plt.title('Factor of Safety (FoS)')
-plt.xlabel('Longitude')
-plt.ylabel('Latitude')
+# Create the figure and axis
+fig, ax = plt.subplots(figsize=(10, 8))
+
+# Plot the DEM data
+dem_plot = ax.imshow(dem, cmap='viridis', extent=(left, right, bottom, top))
+
+# Plot the FoS data
+fos_plot = ax.imshow(fos, cmap='RdYlGn', extent=(left, right, bottom, top), alpha=0.75)
+
+# Add colorbars
+cbar_dem = fig.colorbar(dem_plot, ax=ax, fraction=0.046, pad=0.12 , location='right')
+cbar_fos = fig.colorbar(fos_plot, ax=ax, fraction=0.046, pad=0.08)
+
+# Set colorbar labels
+cbar_dem.set_label('Elevation (m)')
+cbar_fos.set_label('Factor of Safety')
+
+# Set plot title and labels
+ax.set_title('2017 Factor of Safety (FoS) and DEM')
+ax.set_xlabel('Longitude')
+ax.set_ylabel('Latitude')
+
 plt.show()
+
 
 
 #%%
