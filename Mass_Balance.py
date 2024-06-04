@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 29 12:16:22 2024
-
-@author: jettr
-"""
-#%%
-
 import os
 import rasterio as rio
 from rasterio.windows import Window
