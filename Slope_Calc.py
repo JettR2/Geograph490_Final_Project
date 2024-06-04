@@ -252,12 +252,13 @@ with rio.open('Slope_Diff.tif') as src:
 
 max_value_diff = np.nanmax(Diff_data)
 min_value_diff = np.nanmin(Diff_data)
+# Define the zoomed-in extent (adjust these values as needed)
 
 # crop region
-xmin = 1000
-xmax = 2000
-ymin = 900
-ymax = 1500
+xmin = 1050
+xmax = 1800
+ymin = 950
+ymax = 1400
 
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
@@ -288,10 +289,12 @@ with rio.open('Slope_Diff.tif') as src:
 max_value_diff = np.nanmax(Diff_data)
 min_value_diff = np.nanmin(Diff_data)
 
-xmin = 1000
-xmax = 2000
-ymin = 900
-ymax = 1500
+# crop region
+xmin = 1050
+xmax = 1800
+ymin = 950
+ymax = 1400
+
 
 plt.figure()
 
@@ -305,45 +308,3 @@ plt.gca().invert_yaxis()
 plt.show()
 
 
-#%%
-
-# xmin = 1050  
-# xmax = 1800  
-# ymin = 950  
-# ymax = 1400 
-
-# # Create a figure with subplots
-# fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(12, 10))
-
-# # Plot the cropped images on the subplots
-# im1 = ax1.imshow(Diff_data[ymin:ymax, xmin:xmax], cmap='bwr_r')
-# ax1.set_title('Difference')
-
-# im2 = ax2.imshow(Slope_2017_array[ymin:ymax, xmin:xmax], cmap='bwr_r')
-# ax2.set_title('2017 Slope')
-
-# im3 = ax3.imshow(Slope_2009_array[ymin:ymax, xmin:xmax], cmap='bwr_r')
-# ax3.set_title('2009 Slope')
-
-# # To avoid issues with an extra Axes, we add an empty plot for ax4
-# ax4.axis('off')  # Hides the 4th subplot as it's not used
-
-# # Hide the tick marks on all subplots
-# ax1.set_xticks([])
-# ax1.set_yticks([])
-# ax2.set_xticks([])
-# ax2.set_yticks([])
-# ax3.set_xticks([])
-# ax3.set_yticks([])
-# ax4.set_xticks([])
-# ax4.set_yticks([])
-
-# # Create a single colorbar for all subplots
-# cbar_ax = fig.add_axes([0.15, 0.1, 0.7, 0.03])  # Adjust these values as needed
-# cbar = fig.colorbar(im1, cax=cbar_ax, orientation='horizontal')
-
-
-# # Adjust the layout to prevent overlap
-# plt.subplots_adjust(left=0.1, bottom=0.1, right=0.85, top=0.8, wspace=0.15, hspace=0)
-
-# plt.show()
