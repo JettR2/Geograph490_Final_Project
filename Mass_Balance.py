@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 29 12:16:22 2024
-
-@author: jettr
-"""
-#%%
-
 import os
 import rasterio as rio
 from rasterio.windows import Window
@@ -34,6 +26,7 @@ diffarray = diffmap.read(1)
 post_slide_dem_path = 'Slope2017.tif'
 post_slide_dem = rio.open(post_slide_dem_path)
 post_slide_array = post_slide_dem.read(1)
+
 #%%
 # Define the zoomed-in extent
 xmin, xmax = 1050, 1800
@@ -43,6 +36,7 @@ ymin, ymax = 950, 1400
 window = Window.from_slices((ymin, ymax), (xmin, xmax))
 cropped_diffarray = diffmap.read(1, window=window)
 cropped_post_slide_array = post_slide_dem.read(1, window=window)
+
 #%%
 
 # Separate the negative and positive values into different arrays
@@ -60,6 +54,7 @@ volume_negative = abs(np.sum(negative_values) * pixel_size)
 
 # Calculate the mass balance
 mass_balance = volume_positive - volume_negative
+total_changed_area = area_positive + area_negative
 #%%
 
 # Function to plot DEM with overlay
@@ -95,13 +90,16 @@ plot_dem_with_overlay(
     'Blues', 0, max_abs_value_positive, 'Positive Elevation Change (meters)'
 )
 
+#%%
 # Print area and volume calculations
-print(f'Area of the Upended Block (positive values ~ Moved Mass): {area_positive*0.000001} square kilometers')
-print(f'Volume of the Upended Block (positive values): {volume_positive} cubic meters')
-print(f'Area of the Slumped Block (negative values ~ Moved Mass): {area_negative*0.000001} square kilometers')
-print(f'Volume of the Slumped Block (negative values): {volume_negative} cubic meters')
-print(f'Mass Balance = Positive Values + Negative Values: {mass_balance} cubic meters')
-
+print(f'Area of the Upended Block (positive values ~ Moved Mass): {area_positive*0.000001} km^2')
+print(f'Volume of the Upended Block (positive values): {volume_positive} meters^3')
+print('')
+print(f'Area of the Slumped Block (negative values ~ Moved Mass): {area_negative*0.000001} km^2')
+print(f'Volume of the Slumped Block (negative values): {volume_negative} meters^3')
+print('')
+print(f'Mass Balance = Positive Values + Negative Values: {mass_balance} meters^3')
+print(f'Total Changed Area {total_changed_area} m^2 or {total_changed_area*0.000001} km^2')
 # Close the datasets
 diffmap.close()
 post_slide_dem.close()
