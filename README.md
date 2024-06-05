@@ -30,11 +30,8 @@ We want to use raster tools to calculate the changes in topography due to the la
 We should hope to understand what kind of landslide occured, how far it moved, and why, is it in equilibrium/static now? 
 
 ### References
-Xiong, L., Li, S., Tang, G., & Strobl, J. (2022). Geomorphometry and terrain analysis: data, methods, platforms and applications. Earth-Science Reviews, 233, 104191. https://doi.org/10.1016/j.earscirev.2022.104191
-
-Schilirò, L., Cevasco, A., Esposito, C., & Mugnozza, G. S. (2018). Shallow landslide initiation on terraced slopes: inferences from a physically based approach. Geomatics, Natural Hazards and Risk, 9(1), 295–324. https://doi.org/10.1080/19475705.2018.1430066
-
-Johnson, S. E., Haneberg, W. C., Bryson, L. S., & Crawford, M. M. (2023). Measuring ground surface elevation changes in a slow-moving colluvial landslide using combinations of regional airborne lidar, UAV lidar and UAV photogrammetric surveys. Quarterly Journal of Engineering Geology and Hydrogeology, 56(2). https://doi.org/10.1144/qjegh2022-078
-
-‌‌
-‌
+LaHusen, S. R., et al. Rainfall Triggers More Deep-Seated Landslides than Cascadia Earthquakes in the Oregon Coast Range, USA.” Science Advances, vol. 6, no. 38, 18 Sept. 2020, https://doi.org/10.1126/sciadv.aba6790.
+Wei,z.l.,lu,q.,sun,h.y.,shang,y.q.(2019).estimating the rainfall threshold of a deep-seated landslide by integrating models for predicting the groundwater level and stability analysis of the slope. Engineering geology, 253, 14-26. https://www.sciencedirect.com/science/article/abs/pii/S0013795218318210
+Zhang,w.j.,chen,y.m.,zhan,l.t.,(2006).loading/unloading response ratio theory applied in predicting deep-seated landslides triggering. Engineering geology, 82, 234-240. https://www.sciencedirect.com/science/article/abs/pii/S0013795205003145
+Anderson,r.s.,Anderson,s.p.,(2010).water in the landscape In Geomorphology: the mechanics and chemistry of landscapes.(348-377). Cambridge university press
+![image](https://github.com/JettR2/Geograph490_Final_Project/assets/161770051/bd33b7c7-b473-4288-8516-2ccc98e7046c)
