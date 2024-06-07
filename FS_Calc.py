@@ -2,7 +2,7 @@
 """
 Created on Mon May 20 14:52:38 2024
 
-@author: jettr
+@author: jettr and jamel
 """
 
 #%%
