@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import Normalize
 
-# Set working directory
+# Create working directory
 working_directory = 'C:/Users/jettr/Dropbox (University of Oregon)/ESP_Research/Python Files/'
 os.chdir(working_directory)
 
